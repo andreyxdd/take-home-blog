@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Take Home Blog Node.js Project",
+    "description": "API CRUD Documentation",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Endpoints to handle authorization/authentification"
+    },
+    {
+      "name": "Blog",
+      "description": "Endpoints to handle read/write/delete operation on the blog data"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Register a new user",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Login an existing user",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User credentials",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "USer is logged-in",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/refresh-token": {
+      "patch": {
+        "tags": ["Auth"],
+        "description": "Refresh access token",
+        "produces": ["application/json"]
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": ["Blog"],
+        "description": "Get posts (with pagination)",
+        "produces": ["application/json"]
+      },
+      "put": {
+        "tags": ["Blog"],
+        "description": "Add a new post or update existing one",
+        "produces": ["application/json"]
+      },
+      "delete":{
+        "tags": ["Blog"],
+        "description": "Delete an existing post",
+        "produces": ["application/json"]
+      }
+    }
+  }
+}
