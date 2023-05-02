@@ -25,7 +25,7 @@
     "typeRoots": ["src/config/@types", "node_modules/@types"]
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts", "global.d.ts"],
+  "include": ["./src/**/*.ts", "./prisma/**/*.ts", "global.d.ts"],
   "paths": {
     "*": ["global.d.ts"]
 },

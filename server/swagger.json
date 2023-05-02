@@ -24,21 +24,31 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
-    "/register": {
+    "/api/auth/register": {
       "post": {
         "tags": ["Auth"],
         "description": "Register a new user",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserResponse"
             }
           }
         }
       }
     },
-    "/login": {
+    "/api/auth/login": {
       "post": {
         "tags": ["Auth"],
         "description": "Login an existing user",
@@ -46,27 +56,39 @@
           {
             "name": "user",
             "in": "body",
-            "description": "User credentials",
+            "description": "User to be loged-in",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserLogin"
             }
           }
         ],
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "USer is logged-in",
+            "description": "User is logged-in",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserResponse"
             }
           }
         }
       }
     },
-    "/refresh-token": {
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Logout an existing user",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "User is logged-out"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh-tokens": {
       "patch": {
         "tags": ["Auth"],
-        "description": "Refresh access token",
+        "description": "Issue new access and refresh tokens",
         "produces": ["application/json"]
       }
     },
@@ -85,6 +107,46 @@
         "tags": ["Blog"],
         "description": "Delete an existing post",
         "produces": ["application/json"]
+      }
+    }
+  },
+  "definitions": {
+    "UserRegistration": {
+      "required": ["email", "password", "name"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLogin": {
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "default": "alice@prisma.io"
+        },
+        "password": {
+          "type": "string",
+          "default": "qwerty123"
+        }
+      }
+    },
+    "UserResponse": {
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
       }
     }
   }

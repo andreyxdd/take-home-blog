@@ -2,6 +2,8 @@ import { CookieOptions } from 'express';
 
 require('dotenv').config();
 
+const isProduction = process.env.NODE_ENV !== 'production';
+
 export const corsOptions = {
   allowedHeaders: [
     'Origin', 'X-Requested-With', 'Content-Type',
@@ -14,11 +16,9 @@ export const corsOptions = {
 
 export const cookiesOptions: CookieOptions = {
   httpOnly: true,
-  // secure: isProduction,
-  secure: true,
-  // sameSite: (isProduction ? 'strict' : 'lax'),
-  sameSite: 'none',
-  // domain: process.env.BASE_DOMAIN,
+  secure: isProduction,
+  sameSite: (isProduction ? 'strict' : 'lax'),
+  // domain: isProduction ? process.env.BASE_DOMAIN : '*',
   path: '/',
 };
 

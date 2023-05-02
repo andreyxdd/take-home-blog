@@ -17,6 +17,9 @@ import { version } from '../package.json';
 import { corsOptions } from './utils/config';
 import logger from './utils/logger';
 
+import authRoute from './routes/auth';
+import blogRoute from './routes/blog';
+
 require('dotenv').config();
 
 const HOST = process.env.HOST || "http://localhost";
@@ -54,7 +57,10 @@ const app = express();
   app.use('/api', limiter);
 
   // documentation interface
-  app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerConfig))
+  const options = {
+    customCss: '.swagger-ui .topbar { display: none }'
+  };
+  app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerConfig, options))
 
   // Compress the responses
   app.use(compression());
@@ -64,6 +70,8 @@ const app = express();
 app.get('/', (_, res) => {
   res.send(`API version ${version}`);
 });
+app.use('/api/auth', authRoute);
+app.use('/api/blog', blogRoute);
 // -- 
 
 
