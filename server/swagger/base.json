@@ -92,21 +92,87 @@
         "produces": ["application/json"]
       }
     },
-    "/posts": {
+    "/api/blog/posts": {
       "get": {
         "tags": ["Blog"],
         "description": "Get posts (with pagination)",
-        "produces": ["application/json"]
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page nunmber"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Pagination limit"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Portion of 20 posts",
+            "schema": {
+              "$ref": "#/definitions/Posts"
+            }
+          }
+        }
       },
+      "post": {
+        "tags": ["Blog"],
+        "description": "Add a new post",
+        "parameters": [
+          {
+            "name": "Post a new post",
+            "in": "body",
+            "description": "Data from a new post",
+            "schema": {
+              "$ref": "#/definitions/PostPut"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "A newly created post",
+            "schema": {
+              "$ref": "#/definitions/PostResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/blog/post/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id of the post to create/update",
+          "type": "integer"
+        }
+      ],
       "put": {
+        "summary": "Update post with the given id",
         "tags": ["Blog"],
-        "description": "Add a new post or update existing one",
-        "produces": ["application/json"]
-      },
-      "delete":{
-        "tags": ["Blog"],
-        "description": "Delete an existing post",
-        "produces": ["application/json"]
+        "parameters": [
+          {
+            "name": "post",
+            "in": "body",
+            "description": "A new or updated post",
+            "schema": {
+              "$ref": "#/definitions/PostPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "schema": {
+              "$ref": "#/definitions/PostResponse"
+            }
+          }
+        }
       }
     }
   },
@@ -130,7 +196,7 @@
       "properties": {
         "email": {
           "type": "string",
-          "default": "alice@prisma.io"
+          "default": "alice@test.com"
         },
         "password": {
           "type": "string",
@@ -148,6 +214,46 @@
           "type": "string"
         }
       }
+    },
+    "PostsGet": {
+      "required": ["page", "limit"],
+      "properties": {
+        "page": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        }
+      }
+    },
+    "PostPut": {
+      "required": ["title", "content"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "PostResponse": {
+      "required": ["title", "content", "updatedAt"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Posts": {
+      "type": "array",
+      "$ref": "#/definitions/PostResponse"
     }
   }
 }

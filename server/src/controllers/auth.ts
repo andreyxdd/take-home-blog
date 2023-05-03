@@ -39,7 +39,7 @@ export const register = async (req: Request, res: Response) => {
       name: user.name,
     });
   } catch (e) {
-    logger.info(e);
+    logger.error(e);
     return res.status(500).send({ details: e.message });
   }
 };
@@ -67,7 +67,7 @@ export const login = async (req: Request, res: Response) => {
       name: existingUser.name,
     });
   } catch (e) {
-    logger.info(e);
+    logger.error(e);
     return res.status(500).send({ details: e.message });
   }
 };
@@ -93,7 +93,7 @@ export const logout = async (_req: Request, res: Response) => {
   } catch (e) {
     attachRefreshToken(res, '');
     attachAccessToken(res, '');
-    logger.info(e);
+    logger.error(e);
     return res.status(500).send({ details: e.message });
   }
 }
@@ -137,7 +137,7 @@ export const refreshTokens = async (req: Request, res: Response) => {
   } catch (e) {
     attachRefreshToken(res, '');
     attachAccessToken(res, '');
-    logger.info(e);
+    logger.error(e);
     return res.status(500).send({ details: e.message });
   }
 };

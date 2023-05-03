@@ -11,7 +11,7 @@ import { rateLimit } from 'express-rate-limit';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 
-import swaggerConfig from '../swagger.json';
+import swaggerConfig from '../swagger';
 import { version } from '../package.json';
 
 import { corsOptions } from './utils/config';
