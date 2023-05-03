@@ -1,7 +1,11 @@
 import base from './base.json';
+import paths from './paths.json';
+import definitions from './definitions.json';
 
 const config = {
-  ...base
+  ...base,
+  paths: { ...paths },
+  definitions: { ...definitions }
 }
 
 export default config;

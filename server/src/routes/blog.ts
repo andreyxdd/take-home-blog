@@ -1,19 +1,53 @@
 import { Router } from 'express';
-import { query } from 'express-validator';
+import { query, body } from 'express-validator';
 import paginationMiddleware from '../middleware/pagination';
 // import authMiddleware from '../middleware/auth';
-import { getPosts, addPost } from '../controllers/blog';
+import { getPosts, addPost, patchPost, deletePost } from '../controllers/blog';
 
 const router = Router();
 
 // router.use(authMiddleware);
-router.post('/posts', addPost);
+router.post(
+  '/posts',
+  body('title').notEmpty().isString(),
+  body('content').notEmpty().isString(),
+  addPost
+);
 
-router.use(
-  query('page').isInt(),
-  query('limit').isInt()
-)
-router.use(paginationMiddleware("post"));
-router.get('/posts', getPosts);
+router.patch(
+  '/post',
+  query('id').notEmpty().isInt(),
+  body('title').notEmpty().isString(),
+  body('content').notEmpty().isString(),
+  patchPost
+);
+
+router.delete(
+  '/post',
+  query('id').notEmpty().isInt(),
+  deletePost
+);
+
+router.get(
+  '/posts',
+  query('page').notEmpty().isInt(),
+  query('limit').notEmpty().isInt(),
+  paginationMiddleware(
+    "post",
+    {
+      id: true,
+      title: true,
+      content: true,
+      updatedAt: true,
+      author: {
+        select: {
+          name: true,
+          id: true,
+        }
+      },
+    }
+  ),
+  getPosts
+);
 
 export default router;

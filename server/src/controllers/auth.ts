@@ -37,6 +37,7 @@ export const register = async (req: Request, res: Response) => {
     return res.status(200).send({
       email: user.email,
       name: user.name,
+      id: user.id,
     });
   } catch (e) {
     logger.error(e);
@@ -65,6 +66,7 @@ export const login = async (req: Request, res: Response) => {
     return res.status(200).send({
       email: existingUser.email,
       name: existingUser.name,
+      id: existingUser.id,
     });
   } catch (e) {
     logger.error(e);

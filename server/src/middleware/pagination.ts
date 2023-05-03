@@ -1,13 +1,8 @@
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { PrismaModelName, RequestProps } from '../types'
+import { PrismaModelName, RequestProps, PaginationQuery } from '../types'
 import prisma from '../utils/db';
 import logger from '../utils/logger';
-
-type PaginationQuery = {
-  page: number;
-  limit: number;
-}
 
 type PaginationResults = {
   next?: PaginationQuery;
@@ -15,7 +10,7 @@ type PaginationResults = {
   data?: any;
 }
 
-function pagination(modelName: PrismaModelName) {
+function pagination(modelName: PrismaModelName, select: any) {
   return async (req: RequestProps<{}, PaginationQuery>, res: Response, next: NextFunction) => {
     
     const errors = validationResult(req);
@@ -55,11 +50,10 @@ function pagination(modelName: PrismaModelName) {
       paginated.data = await model.findMany({
         skip: startIndex,
         take: limit,
+        select,
       })
       res.locals.paginated = paginated;
 
-      console.log(paginated);
-      
       return next();
     } catch (e) {
       logger.error(e);

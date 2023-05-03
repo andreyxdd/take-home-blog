@@ -16,11 +16,11 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "quotes": ["error", "single"],
-    // we want to force semicolons
+    // force semicolons
     "semi": ["error", "always"],
-    // we use 2 spaces to indent our code
+    // 2 spaces to indent the code
     "indent": ["error", 2],
-    // we want to avoid extraneous spaces
+    // to avoid extraneous spaces
     "no-multi-spaces": ["error"],
     "linebreak-style": 0,
     "import/extensions": [
