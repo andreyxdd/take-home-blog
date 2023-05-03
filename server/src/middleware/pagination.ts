@@ -10,8 +10,15 @@ type PaginationResults = {
   data?: any;
 }
 
-function pagination(modelName: PrismaModelName, select: any) {
-  return async (req: RequestProps<{}, PaginationQuery>, res: Response, next: NextFunction) => {
+function pagination(
+  modelName: PrismaModelName,
+  select: any = {},
+) {
+  return async (
+    req: RequestProps<{}, PaginationQuery>,
+    res: Response,
+    next: NextFunction
+  ) => {
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

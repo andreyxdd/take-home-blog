@@ -28,24 +28,25 @@ router.delete(
   deletePost
 );
 
+const postSelectFields = {
+  id: true,
+  title: true,
+  content: true,
+  updatedAt: true,
+  author: {
+    select: {
+      name: true,
+      id: true,
+    }
+  },
+};
 router.get(
   '/posts',
   query('page').notEmpty().isInt(),
   query('limit').notEmpty().isInt(),
   paginationMiddleware(
     "post",
-    {
-      id: true,
-      title: true,
-      content: true,
-      updatedAt: true,
-      author: {
-        select: {
-          name: true,
-          id: true,
-        }
-      },
-    }
+    postSelectFields
   ),
   getPosts
 );
