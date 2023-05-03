@@ -58,7 +58,8 @@ const app = express();
 
   // documentation interface
   const options = {
-    customCss: '.swagger-ui .topbar { display: none }'
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Blog API Docs",
   };
   app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerConfig, options))
 
