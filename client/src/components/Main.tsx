@@ -21,10 +21,9 @@ export default function Main({ posts, mainTitle }: MainProps) {
         {posts.map(({
           id, title, content, updatedAt, author,
         }) => (
-          <Grid item>
+          <Grid item key={id + author.id} flexGrow={1}>
             <Post
-              key={id + author.id}
-          // id={id}
+              // id={id}
               title={title}
               content={content}
               updatedAt={updatedAt}

@@ -5,9 +5,8 @@ import prisma from '../utils/db';
 import logger from '../utils/logger';
 
 type PaginationResults = {
-  next?: PaginationQuery;
-  previous?: PaginationQuery;
   data?: any;
+  totalPages: number;
 }
 
 function pagination(
@@ -30,35 +29,23 @@ function pagination(
     limit = Number(limit);
 
     const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginated: PaginationResults = {};
+    const paginated: PaginationResults = {
+      totalPages: 0
+    };
 
-    const model = prisma[modelName];
-
-    // @ts-ignore
-    const totalCount = await model.count()
-
-    if (endIndex < totalCount) {
-      paginated.next = {
-        page: page + 1,
-        limit: limit
-      }
-    }
-    
-    if (startIndex > 0) {
-      paginated.previous = {
-        page: page - 1,
-        limit: limit
-      }
-    }
 
     try {
+      const model = prisma[modelName];
       // @ts-ignore
       paginated.data = await model.findMany({
         skip: startIndex,
         take: limit,
         select,
       })
+
+      // @ts-ignore
+      const totalCount = await model.count()
+      paginated.totalPages = Math.ceil(totalCount / limit);
       res.locals.paginated = paginated;
 
       return next();

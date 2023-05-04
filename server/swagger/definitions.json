@@ -69,8 +69,15 @@
     }
   },
   "PostsResponse": {
-    "type": "array",
-    "$ref": "#/definitions/PostResponse"
+    "properties": {
+      "totalPages":{
+        "type": "number"
+      },
+      "data": {
+        "type": "array",
+        "$ref": "#/definitions/PostResponse"
+      }
+    }
   },
   "PostAddUpdate": {
     "required": ["title", "content"],
