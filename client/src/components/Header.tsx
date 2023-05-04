@@ -3,70 +3,39 @@ import PropTypes from 'prop-types';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import { logout } from '../services/auth';
 import useUserContext from '../hooks/useUserContext';
 
 type HeaderProps = {
   title: string;
-  sections: Array<{
-    title: string;
-    url: string;
-  }>
 }
 
-function Header({ sections, title }: HeaderProps) {
+function Header({ title }: HeaderProps) {
   const { setUser } = useUserContext();
   const handleSignOut = async () => {
     await logout();
     setUser(null);
   };
   return (
-    <>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="left"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          {title}
-        </Typography>
-        <Button variant="outlined" size="small" onClick={handleSignOut}>
-          Sign out
-        </Button>
-      </Toolbar>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
+    <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Typography
+        component="h2"
+        variant="h5"
+        color="inherit"
+        align="left"
+        noWrap
+        sx={{ flex: 1 }}
       >
-        {sections.map((section) => (
-          <Link
-            color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
-          >
-            {section.title}
-          </Link>
-        ))}
-      </Toolbar>
-    </>
+        {title}
+      </Typography>
+      <Button variant="outlined" size="small" onClick={handleSignOut}>
+        Sign out
+      </Button>
+    </Toolbar>
   );
 }
 
 Header.propTypes = {
-  sections: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
   title: PropTypes.string.isRequired,
 };
 

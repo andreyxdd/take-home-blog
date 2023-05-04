@@ -2,7 +2,8 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Button, CardActions } from '@mui/material';
+import { Button, CardActions, Grid } from '@mui/material';
+import { format } from 'date-fns';
 
 type PostComponentProps = {
   // id: number;
@@ -19,27 +20,33 @@ function Post({
   return (
     <Card>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
           {title}
         </Typography>
         <Typography gutterBottom variant="subtitle2" component="div">
-          {updatedAt}
+          {format(new Date(updatedAt), 'PPpp')}
           {' '}
           by
           {' '}
-          {authorName}
+          <b>{authorName}</b>
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {content}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
-          Edit
-        </Button>
-        <Button size="small" color="secondary">
-          Delete
-        </Button>
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <Button size="small" color="primary">
+              Edit
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button size="small" color="secondary">
+              Delete
+            </Button>
+          </Grid>
+        </Grid>
       </CardActions>
     </Card>
   );

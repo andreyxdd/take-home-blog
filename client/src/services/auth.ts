@@ -55,7 +55,7 @@ export const login = async (
  * @returns fetched data of a new user
  */
 export const register = async (
-  { email, password }: CredentialsProps,
+  { email, password, name }: CredentialsProps,
 ): Promise<UserProps | null> => {
   try {
     const { data: user }: { data: UserProps } = await axios.post(
@@ -63,6 +63,13 @@ export const register = async (
       {
         email: email.toLowerCase(),
         password,
+        name,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-type': 'application/json',
+        },
       },
     );
     return user;
@@ -79,6 +86,8 @@ export const logout = async () => {
   try {
     await axiosAuthInstance.post(
       'http://localhost:4000/api/auth/logout',
+      {},
+      { withCredentials: true },
     );
   } catch (error: any) {
     handleError(error);

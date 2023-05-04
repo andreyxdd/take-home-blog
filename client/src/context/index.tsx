@@ -6,23 +6,29 @@ import { getUser } from '../services/auth';
 export type IUserContext ={
   user: UserProps | null;
   setUser: React.Dispatch<React.SetStateAction<UserProps | null>> | (() => void);
-  isUserContextReady: boolean;
+  userWantsSignIn: boolean;
+  setUserWantsSignIn: React.Dispatch<React.SetStateAction<boolean>> | (() => void);
+  isLoading: boolean;
 }
 
 export const UserContext = React.createContext<IUserContext>({
   user: null,
   setUser: () => ({}),
-  isUserContextReady: false,
+  userWantsSignIn: true,
+  setUserWantsSignIn: () => ({}),
+  isLoading: true,
 });
 
 export function UserContextProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<UserProps | null>(null);
-  const [isUserContextReady, setIsUserContextReady] = React.useState(false);
+  const [userWantsSignIn, setUserWantsSignIn] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   // Load any resources or data that we need prior to loading the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
+        setIsLoading(true);
         const fetchedUser = await getUser();
         setUser(fetchedUser);
 
@@ -31,15 +37,15 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       } catch (e) {
         console.warn(e);
       } finally {
-        setIsUserContextReady(true);
+        setIsLoading(false);
       }
     }
     loadResourcesAndDataAsync();
   }, []);
 
   const value = React.useMemo(() => ({
-    user, setUser, isUserContextReady,
-  }), [user, setUser, isUserContextReady]);
+    user, setUser, isLoading, userWantsSignIn, setUserWantsSignIn,
+  }), [user, isLoading, userWantsSignIn]);
 
   return (
     <UserContext.Provider value={value}>

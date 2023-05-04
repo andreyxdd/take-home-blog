@@ -9,21 +9,6 @@ import Main from '../components/Main';
 import { PostProps } from '../types';
 import { getPosts } from '../services/blog';
 
-const sampleSections = [
-  {
-    title: 'Home',
-    url: '#',
-  },
-  {
-    title: 'About',
-    url: '#',
-  },
-  {
-    title: 'Contact',
-    url: '#',
-  },
-];
-
 export default function Blog() {
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [totalPages, setTotalPages] = React.useState<number>(0);
@@ -50,7 +35,7 @@ export default function Blog() {
 
   return (
     <Container maxWidth="lg">
-      <Header title="Take Home Blog Node.js" sections={sampleSections} />
+      <Header title="Take Home Blog Node.js" />
       <main>
         <Grid container spacing={3} sx={{ mt: 3 }} justifyContent="center">
           <Main posts={posts} mainTitle="Posts" />
