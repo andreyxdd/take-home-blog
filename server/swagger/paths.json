@@ -1,4 +1,19 @@
 {
+  "/api/auth/user": {
+    "get": {
+      "tags": ["Auth"],
+      "description": "Get user data (if authorized)",
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "User data",
+          "schema": {
+            "$ref": "#/definitions/UserResponse"
+          }
+        }
+      }
+    }
+  },
   "/api/auth/register": {
     "post": {
       "tags": ["Auth"],

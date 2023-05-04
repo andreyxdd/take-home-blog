@@ -4,6 +4,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { logout } from '../services/auth';
+import useUserContext from '../hooks/useUserContext';
 
 type HeaderProps = {
   title: string;
@@ -14,6 +16,11 @@ type HeaderProps = {
 }
 
 function Header({ sections, title }: HeaderProps) {
+  const { setUser } = useUserContext();
+  const handleSignOut = async () => {
+    await logout();
+    setUser(null);
+  };
   return (
     <>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -27,7 +34,7 @@ function Header({ sections, title }: HeaderProps) {
         >
           {title}
         </Typography>
-        <Button variant="outlined" size="small">
+        <Button variant="outlined" size="small" onClick={handleSignOut}>
           Sign out
         </Button>
       </Toolbar>

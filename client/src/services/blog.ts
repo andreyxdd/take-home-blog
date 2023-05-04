@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { axiosAuthInstance, handleError } from '.';
+import { axiosAuthInstance, handleError } from './index';
 import { PostProps } from '../types';
 
 type GetPostsProps = {

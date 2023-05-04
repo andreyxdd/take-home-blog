@@ -10,15 +10,16 @@ export const corsOptions = {
     'Accept', 'X-Access-Token', 'Authorization',
   ],
   credentials: true, // this allows to send cookies back (to client)
-  methods: 'GET,HEAD,OPTIONS',
+  origin: "http://localhost:3000",
+  methods: 'GET,HEAD,OPTIONS,PATCH',
   preflightContinue: false,
 };
 
 export const cookiesOptions: CookieOptions = {
-  httpOnly: true,
+  // httpOnly: true,
   secure: isProduction,
   sameSite: (isProduction ? 'strict' : 'lax'),
-  // domain: isProduction ? process.env.BASE_DOMAIN : '*',
+  domain: isProduction ? process.env.BASE_DOMAIN : '*',
   path: '/',
 };
 

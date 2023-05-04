@@ -19,15 +19,14 @@ export const createRefreshToken = (user: Pick<User, "id" | "tokenVersion">) => s
 );
 
 export const attachRefreshToken = (res: Response, refreshToken: string) => {
-  res.cookie('rtjid', refreshToken, { // 
+  res.cookie('rt', refreshToken, { // 
     ...cookiesOptions,
     maxAge: refreshToken ? 7 * 24 * 60 * 60 * 1000 : 0, // 7 days
-    path: 'api/auth/refresh-tokens',
   });
 };
 
 export const attachAccessToken = (res: Response, accessToken: string) => {
-  res.cookie('jid', accessToken, {
+  res.cookie('at', accessToken, {
     ...cookiesOptions,
     maxAge: accessToken ? 15 * 1000 : 0, // 15 min
   });

@@ -10,6 +10,28 @@ import prisma from '../utils/db';
 import logger from '../utils/logger';
 import { timeToUpdateRefreshToken } from '../utils/config';
 
+export const getUser = async (_req: Request, res: Response) => {
+  try {
+    const id = res.locals.payload.id;
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    });
+    if (!existingUser) {
+      return res.status(404).send({ details: 'User with given id doesn\'t exists' });
+    }
+
+    return res.status(200).send(existingUser);
+  } catch (e) {
+    logger.error(e);
+    return res.status(500).send({ details: e.message });
+  }
+};
+
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -103,27 +125,27 @@ export const logout = async (_req: Request, res: Response) => {
 
 export const refreshTokens = async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.cookies.rtjid;
-
+    const refreshToken = req.cookies.rt;
+  
     if (!refreshToken) {
-      return res.status(401).json({ details: 'Access denied: not authenticated' });
+      return res.status(401).send({ details: 'Access denied: not authorized' });
     }
 
     // check if refresh token is valid
     const refreshPayload: any  = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
     if (!('id' in refreshPayload) || !('tokenVersion' in refreshPayload)) { // not in
-      return res.status(404).json({ details: 'Invalid payload' });
+      return res.status(404).send({ details: 'Invalid payload' });
     }
 
     const existingUser = await prisma.user.findUnique({
       where: { id: refreshPayload.id },
     });
     if (!existingUser) {
-      return res.status(401).json({ details: 'Access denied: not authenticated' });
+      return res.status(401).send({ details: 'Access denied: not authorized' });
     }
 
     if (existingUser.tokenVersion !== refreshPayload.tokenVersion) {
-      return res.status(401).json({ details: 'Access denied: not authenticated' });
+      return res.status(401).send({ details: 'Access denied: not authorized' });
     }
 
     // check if the refresh token has expired

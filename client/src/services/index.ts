@@ -52,9 +52,8 @@ export const axiosAuthInstance = axios.create();
 // Request interceptor for API calls
 axiosAuthInstance.interceptors.request.use(
   async (config) => {
-    const accessToken = Cookies.get('jid');
-    const refreshToken = Cookies.get('rtjid');
-    if (accessToken && refreshToken) {
+    const accessToken = Cookies.get('at');
+    if (accessToken) {
       // @ts-ignore
       config.headers = {
         ...config.headers,
@@ -62,9 +61,8 @@ axiosAuthInstance.interceptors.request.use(
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
       };
-      return config;
     }
-    throw new Error('Unauthorized request');
+    return config;
   },
   (error) => { Promise.reject(error); },
 );
@@ -73,18 +71,23 @@ axiosAuthInstance.interceptors.request.use(
 axiosAuthInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const refreshToken = Cookies.get('rtjid');
+    const refreshToken = Cookies.get('rt');
     if (refreshToken) {
       const originalRequest = error.config;
 
-      if (error.response.status === 401 && !originalRequest._retry) {
+      if (error.response.status === 403 && !originalRequest._retry) {
         originalRequest._retry = true;
-        await axios.patch(`${process.env.API_URL}/api/auth/refresh-tokens`);
-        const accessToken = Cookies.get('jid');
+        await axios.patch(
+          'http://localhost:4000/api/auth/refresh-tokens',
+          {},
+          { withCredentials: true },
+        );
+        const accessToken = Cookies.get('at');
+
         axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         return axiosAuthInstance(originalRequest);
       }
     }
-    return Promise.reject(error);
+    return new Error('Unauthorized request');
   },
 );

@@ -8,3 +8,14 @@ export type PostProps = {
     name: string;
   }
 }
+
+export type UserProps = {
+  name: string;
+  email: string;
+  id: string;
+}
+
+export type CredentialsProps = {
+  email: string;
+  password: string;
+}

@@ -3,26 +3,27 @@ import { verify } from 'jsonwebtoken';
 import logger from '../utils/logger';
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
-  const { jid } = req.cookies;
+  const { authorization } = req.headers;
 
-  if (!jid) {
-    res.status(401);
-    return next(new Error('Access denied: not authenticated'));
+  if (!authorization) {
+    res.status(403);
+    return next(new Error('Access denied: not authorized'));
   }
 
-  if (typeof jid !== "string") {
-    res.status(401);
-    return next(new Error('Access denied: not authenticated'));
+  const token = authorization?.split(' ')[1];
+  if (!token) {
+    res.status(403);
+    return next(new Error('Access denied: not authorized'));
   }
 
   try {
-    const payload = verify(jid, process.env.ACCESS_TOKEN_SECRET!);
+    const payload = verify(token, process.env.ACCESS_TOKEN_SECRET!);
     res.locals.payload = payload;
     return next();
   } catch (e) {
     logger.error(e);
-    res.status(401);
-    return next(new Error('Access denied: not authenticated'));
+    res.status(403);
+    return next(new Error('Access denied: not authorized'));
   }
 };
 
