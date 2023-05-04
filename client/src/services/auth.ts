@@ -77,10 +77,8 @@ export const register = async (
  */
 export const logout = async () => {
   try {
-    await axios.post(
+    await axiosAuthInstance.post(
       'http://localhost:4000/api/auth/logout',
-      {},
-      { withCredentials: true },
     );
   } catch (error: any) {
     handleError(error);

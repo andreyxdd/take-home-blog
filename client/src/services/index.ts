@@ -54,13 +54,7 @@ axiosAuthInstance.interceptors.request.use(
   async (config) => {
     const accessToken = Cookies.get('at');
     if (accessToken) {
-      // @ts-ignore
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${accessToken}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      };
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },

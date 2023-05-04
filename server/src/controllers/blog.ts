@@ -18,8 +18,7 @@ export const getPosts = (_req: RequestProps<{}, PaginationQuery>, res: Response)
 
 export const addPost = async (req: RequestProps<PostBody, {}>, res: Response) => {
   try {
-    // const { id: userId } = res.locals.payload;
-    const userId  ="41b9ff05-be0d-4e03-83db-f66f86841fe1"
+    const { id: userId } = res.locals.payload;
     const { title, content } = req.body;
     
     const errors = validationResult(req);

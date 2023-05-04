@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { axiosAuthInstance, handleError } from './index';
 import { PostProps } from '../types';
 
@@ -8,7 +7,7 @@ type GetPostsProps = {
 }
 export const getPosts = async (page: number, limit = 20) => {
   try {
-    const { data }: { data: GetPostsProps } = await axios.get(
+    const { data }: { data: GetPostsProps } = await axiosAuthInstance.get(
       'http://localhost:4000/api/blog/posts',
       { params: { page, limit } },
     );

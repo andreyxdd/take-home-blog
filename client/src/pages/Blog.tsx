@@ -12,15 +12,15 @@ import { getPosts } from '../services/blog';
 const sampleSections = [
   {
     title: 'Home',
-    url: '/home',
+    url: '#',
   },
   {
     title: 'About',
-    url: '/about',
+    url: '#',
   },
   {
     title: 'Contact',
-    url: '/contact',
+    url: '#',
   },
 ];
 
@@ -31,7 +31,7 @@ export default function Blog() {
   React.useEffect(() => {
     getPosts(1, 3)
       .then((results) => {
-        console.log(results);
+        // console.log(results);
         setTotalPages(results.totalPages);
         setPosts(results.data);
       });
