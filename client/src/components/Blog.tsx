@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import { PostProps } from '../types';
 
 const theme = createTheme();
 
@@ -25,14 +26,28 @@ const sampleSections = [
 ];
 
 export default function Blog() {
+  const [posts, setPosts] = React.useState<Array<PostProps>>([]);
+
+  React.useEffect(() => {
+    fetch(`http://localhost:4000/api/blog/posts?${new URLSearchParams({
+      page: '1',
+      limit: '3',
+    })}`)
+      .then((results) => results.json())
+      .then((results) => {
+        const { data } = results;
+        setPosts(data);
+      });
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
         <Header title="Take Home Blog Node.js" sections={sampleSections} />
         <main>
-          <Grid container spacing={5} sx={{ mt: 3 }}>
-            <Main posts={[]} title="Posts" />
+          <Grid container spacing={5} sx={{ mt: 3 }} justifyContent="center">
+            <Main posts={posts} mainTitle="Posts" />
           </Grid>
         </main>
       </Container>

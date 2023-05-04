@@ -7,13 +7,10 @@ import Link from '@mui/material/Link';
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
+      {'See source code at '}
       <Link color="inherit" href="https://github.com/andreyxdd/take-home-blog-nodejs">
-        See source code
+        Github
       </Link>
-      {' '}
-      {new Date().getFullYear()}
-      .
     </Typography>
   );
 }

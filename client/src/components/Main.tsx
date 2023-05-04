@@ -2,33 +2,37 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import { PostProps } from '../types';
+import Post from './Post';
 
 interface MainProps {
-  posts: ReadonlyArray<string>;
-  title: string;
+  posts: Array<PostProps>;
+  mainTitle: string;
 }
 
-export default function Main({ posts, title }: MainProps) {
+export default function Main({ posts, mainTitle }: MainProps) {
   return (
-    <Grid
-      item
-      xs={12}
-      md={8}
-      sx={{
-        '& .markdown': {
-          py: 3,
-        },
-      }}
-    >
+    <Grid item xs={8}>
       <Typography variant="h6" gutterBottom>
-        {title}
+        {mainTitle}
       </Typography>
       <Divider />
-      {posts.map((post) => (
-        <div>
-          {post}
-        </div>
-      ))}
+      <Grid container spacing={3}>
+        {posts.map(({
+          id, title, content, updatedAt, author,
+        }) => (
+          <Grid item>
+            <Post
+              key={id + author.id}
+          // id={id}
+              title={title}
+              content={content}
+              updatedAt={updatedAt}
+              authorName={author.name}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </Grid>
   );
 }

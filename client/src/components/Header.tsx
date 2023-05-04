@@ -21,14 +21,14 @@ function Header({ sections, title }: HeaderProps) {
           component="h2"
           variant="h5"
           color="inherit"
-          align="center"
+          align="left"
           noWrap
           sx={{ flex: 1 }}
         >
           {title}
         </Typography>
         <Button variant="outlined" size="small">
-          Sign up
+          Sign out
         </Button>
       </Toolbar>
       <Toolbar
