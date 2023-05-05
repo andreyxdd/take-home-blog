@@ -1,12 +1,14 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, CircularProgress, CssBaseline } from '@mui/material';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import WelcomePage from './pages/Welcome';
 import BlogPage from './pages/Blog';
 import Footer from './components/Footer';
 import { UserContextProvider } from './context';
 import useUserContext from './hooks/useUserContext';
 
+const queryClient = new QueryClient();
 const theme = createTheme();
 
 function Content() {
@@ -32,15 +34,17 @@ function Content() {
 
 function App() {
   return (
-    <UserContextProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Content />
-        <Footer
-          description="Proudly created by Andrei Volkov"
-        />
-      </ThemeProvider>
-    </UserContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserContextProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Content />
+          <Footer
+            description="Proudly created by Andrei Volkov"
+          />
+        </ThemeProvider>
+      </UserContextProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -20,7 +20,7 @@ export const addPost = async (req: RequestProps<PostBody, {}>, res: Response) =>
   try {
     const { id: userId } = res.locals.payload;
     const { title, content } = req.body;
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send({ details: errors.array() });

@@ -40,13 +40,17 @@ const postSelectFields = {
     }
   },
 };
+const postOrderBy = {
+  updatedAt: 'desc'
+}
 router.get(
   '/posts',
   query('page').notEmpty().isInt(),
   query('limit').notEmpty().isInt(),
   paginationMiddleware(
     "post",
-    postSelectFields
+    postSelectFields,
+    postOrderBy,
   ),
   getPosts
 );

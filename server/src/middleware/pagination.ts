@@ -12,6 +12,7 @@ type PaginationResults = {
 function pagination(
   modelName: PrismaModelName,
   select: any = {},
+  orderBy: any = {},
 ) {
   return async (
     req: RequestProps<{}, PaginationQuery>,
@@ -41,6 +42,7 @@ function pagination(
         skip: startIndex,
         take: limit,
         select,
+        orderBy,
       })
 
       // @ts-ignore

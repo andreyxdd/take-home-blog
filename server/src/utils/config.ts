@@ -11,7 +11,7 @@ export const corsOptions = {
   ],
   credentials: true, // this allows to send cookies back (to client)
   origin: "http://localhost:3000",
-  methods: 'GET,HEAD,OPTIONS,PATCH',
+  methods: 'GET,HEAD,OPTIONS,PATCH,DELETE',
   preflightContinue: false,
 };
 

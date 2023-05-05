@@ -5,6 +5,7 @@ type GetPostsProps = {
   data: Array<PostProps>;
   totalPages: number;
 }
+
 export const getPosts = async (page: number, limit = 20) => {
   try {
     const { data }: { data: GetPostsProps } = await axiosAuthInstance.get(
@@ -18,10 +19,24 @@ export const getPosts = async (page: number, limit = 20) => {
   }
 };
 
+export const addPost = async ({ title, content }: Pick<PostProps, 'title'|'content'>) => {
+  try {
+    await axiosAuthInstance.post(
+      'http://localhost:4000/api/blog/posts',
+      { title, content },
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error: any) {
+    handleError(error);
+    return false;
+  }
+};
+
 export const deletePost = async (postId: number): Promise<boolean> => {
   try {
     await axiosAuthInstance.delete(
-      `${process.env.API_URL}/api/blog/post`,
+      'http://localhost:4000/api/blog/post',
       { params: { id: postId } },
     );
     return true;

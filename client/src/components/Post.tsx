@@ -4,19 +4,31 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Button, CardActions, Grid } from '@mui/material';
 import { format } from 'date-fns';
+import useUserContext from '../hooks/useUserContext';
+import useDeletePostMutation from '../hooks/mutations/useDeletePostMutation';
 
 type PostComponentProps = {
-  // id: number;
+  id: number;
   updatedAt: string;
   title: string;
   content: string;
-  // authorId: string;
   authorName: string;
+  authorId: string;
 }
 
 function Post({
-  title, content, updatedAt, authorName,
+  id, title, content, updatedAt, authorName, authorId,
 }: PostComponentProps) {
+  const { mutate } = useDeletePostMutation();
+  const { user } = useUserContext();
+  if (!user) return null;
+
+  const isUsersPost = authorId === user.id;
+
+  const handlePostDeletion = () => {
+    mutate(id);
+  };
+
   return (
     <Card>
       <CardContent>
@@ -28,26 +40,28 @@ function Post({
           {' '}
           by
           {' '}
-          <b>{authorName}</b>
+          {isUsersPost ? 'you' : <b>{authorName}</b>}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {content}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Grid container justifyContent="space-between">
-          <Grid item>
-            <Button size="small" color="primary">
-              Edit
-            </Button>
+      {isUsersPost ? (
+        <CardActions>
+          <Grid container justifyContent="space-between">
+            <Grid item>
+              <Button size="small" color="primary">
+                Edit
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button size="small" color="secondary" onClick={handlePostDeletion}>
+                Delete
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button size="small" color="secondary">
-              Delete
-            </Button>
-          </Grid>
-        </Grid>
-      </CardActions>
+        </CardActions>
+      ) : null}
     </Card>
   );
 }
