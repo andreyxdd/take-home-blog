@@ -80,13 +80,19 @@
     }
   },
   "PostAddUpdate": {
-    "required": ["title", "content"],
+    "required": ["title", "content", "files"],
     "properties": {
       "title": {
         "type": "string"
       },
       "content": {
         "type": "string"
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "file"
+        }
       }
     }
   }

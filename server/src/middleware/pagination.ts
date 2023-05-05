@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { PrismaModelName, RequestProps, PaginationQuery } from '../types'
+import { PrismaModelName, RequestProps, PaginationQuery } from '../types';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 
@@ -15,11 +16,10 @@ function pagination(
   orderBy: any = {},
 ) {
   return async (
-    req: RequestProps<{}, PaginationQuery>,
+    req: RequestProps<object, PaginationQuery>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
-    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -31,9 +31,8 @@ function pagination(
 
     const startIndex = (page - 1) * limit;
     const paginated: PaginationResults = {
-      totalPages: 0
+      totalPages: 0,
     };
-
 
     try {
       const model = prisma[modelName];
@@ -43,10 +42,10 @@ function pagination(
         take: limit,
         select,
         orderBy,
-      })
+      });
 
       // @ts-ignore
-      const totalCount = await model.count()
+      const totalCount = await model.count();
       paginated.totalPages = Math.ceil(totalCount / limit);
       res.locals.paginated = paginated;
 
@@ -55,7 +54,7 @@ function pagination(
       logger.error(e);
       return res.status(500).send({ details: 'Pagination failed' });
     }
-  }
+  };
 }
-  
+
 export default pagination;

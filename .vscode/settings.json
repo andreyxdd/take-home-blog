@@ -13,11 +13,9 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
-  "eslint.alwaysShowStatus": true,
   "eslint.validate": ["javascript", "typescript", "typescriptreact"],
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "eslint.workingDirectories": ["client","server"],
-
   "html.format.enable": false,
   "htmlhint.enable": true,
   "[html]": {

@@ -3,20 +3,20 @@ import 'reflect-metadata';
 import { Request, Response } from 'express';
 import { hash, compare } from 'bcryptjs';
 import { verify } from 'jsonwebtoken';
+import { validationResult } from 'express-validator';
 import {
   createAccessToken, createRefreshToken,
   attachRefreshToken, revokeRefreshToken,
-  attachAccessToken
+  attachAccessToken,
 } from '../utils/auth';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 import { timeToUpdateRefreshToken } from '../utils/config';
-import { validationResult } from 'express-validator';
 import { RequestProps } from '../types';
 
 export const getUser = async (_req: Request, res: Response) => {
   try {
-    const id = res.locals.payload.id;
+    const { id } = res.locals.payload;
     const existingUser = await prisma.user.findUnique({
       where: { id },
       select: {
@@ -26,7 +26,7 @@ export const getUser = async (_req: Request, res: Response) => {
       },
     });
     if (!existingUser) {
-      return res.status(404).send({ details: 'User with given id doesn\'t exists' });
+      return res.status(404).send({ details: 'User with given id doesn\'t exist' });
     }
 
     return res.status(200).send(existingUser);
@@ -42,8 +42,8 @@ type RegisterBodyProps = {
   name: string;
 }
 export const register = async (
-  req: RequestProps<RegisterBodyProps, {}>,
-  res: Response
+  req: RequestProps<RegisterBodyProps, object>,
+  res: Response,
 ) => {
   try {
     const { email, password, name } = req.body;
@@ -53,7 +53,7 @@ export const register = async (
       return res.status(400).send({ details: errors.array() });
     }
 
-    const existingUser = await prisma.user.findUnique({where: { email }});
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ details: 'User account already exists' });
     }
@@ -63,7 +63,7 @@ export const register = async (
         email,
         password: await hash(password, 12),
         name,
-      }
+      },
     });
 
     if (!user) {
@@ -87,7 +87,10 @@ type LoginBodyProps = {
   email: string;
   password: string;
 }
-export const login = async (req: RequestProps<LoginBodyProps, {}>, res: Response) => {
+export const login = async (
+  req: RequestProps<LoginBodyProps, object>,
+  res: Response,
+) => {
   try {
     const { email, password } = req.body;
 
@@ -96,7 +99,7 @@ export const login = async (req: RequestProps<LoginBodyProps, {}>, res: Response
       return res.status(400).send({ details: errors.array() });
     }
 
-    const existingUser = await prisma.user.findUnique({where: { email }});
+    const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (!existingUser) {
       return res.status(401).json({ details: 'Invalid credentials provided' });
@@ -120,10 +123,9 @@ export const login = async (req: RequestProps<LoginBodyProps, {}>, res: Response
   }
 };
 
-
 export const logout = async (_req: Request, res: Response) => {
   try {
-    const id = res.locals.payload.id; // user id from auth middleware
+    const { id } = res.locals.payload; // user id from auth middleware
     const existingUser = await prisma.user.findUnique({ where: { id } });
 
     if (!existingUser) {
@@ -132,7 +134,7 @@ export const logout = async (_req: Request, res: Response) => {
 
     const revokedStatus = await revokeRefreshToken(existingUser.id);
     if (!revokedStatus) {
-      throw new Error('Tokens were not revoked')
+      throw new Error('Tokens were not revoked');
     }
 
     attachRefreshToken(res, '');
@@ -144,19 +146,18 @@ export const logout = async (_req: Request, res: Response) => {
     logger.error(e);
     return res.status(500).send({ details: e.message });
   }
-}
-
+};
 
 export const refreshTokens = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.rt;
-  
+
     if (!refreshToken) {
       return res.status(401).send({ details: 'Access denied: not authorized' });
     }
 
     // check if refresh token is valid
-    const refreshPayload: any  = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
+    const refreshPayload: any = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
     if (!('id' in refreshPayload) || !('tokenVersion' in refreshPayload)) { // not in
       return res.status(404).send({ details: 'Invalid payload' });
     }

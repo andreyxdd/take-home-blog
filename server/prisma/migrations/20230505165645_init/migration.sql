@@ -27,6 +27,7 @@ CREATE TABLE "File" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "filename" TEXT NOT NULL,
+    "originalname" TEXT NOT NULL,
     "path" TEXT NOT NULL,
     "mimetype" TEXT NOT NULL,
     "size" BIGINT NOT NULL,

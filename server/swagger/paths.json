@@ -118,7 +118,7 @@
       "requestBody": {
         "description": "Title and content of a new post",
         "content": {
-          "application/json": {
+          "multipart/form-data": {
             "schema": {
               "$ref": "#/definitions/PostAddUpdate"
             }
@@ -165,6 +165,36 @@
     "delete": {
       "summary": "Delete the post with the given id",
       "tags": ["Blog"],
+      "responses": {
+        "200": {
+          "description": "Success"
+        }
+      }
+    }
+  },
+
+  "/api/file": {
+    "parameters": [
+      {
+        "name": "filename",
+        "in": "query",
+        "required": true,
+        "description": "Decoded filename",
+        "type": "integer"
+      }
+    ],
+    "get": {
+      "summary": "Get the media file with the given filename",
+      "tags": ["File"],
+      "responses": {
+        "200": {
+          "description": "Success"
+        }
+      }
+    },
+    "delete": {
+      "summary": "Delete a media file with the given filename",
+      "tags": ["File"],
       "responses": {
         "200": {
           "description": "Success"

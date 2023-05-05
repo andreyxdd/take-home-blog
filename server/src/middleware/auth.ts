@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import logger from '../utils/logger';

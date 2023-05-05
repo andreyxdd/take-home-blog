@@ -3,58 +3,68 @@ import { query, body } from 'express-validator';
 import paginationMiddleware from '../middleware/pagination';
 import authMiddleware from '../middleware/auth';
 import uploads from '../middleware/uploads';
-import { getPosts, addPost, patchPost, deletePost } from '../controllers/blog';
+import {
+  getPosts, addPost, patchPost, deletePost,
+} from '../controllers/blog';
 
 const router = Router();
 
 router.use(authMiddleware);
 router.post(
   '/posts',
-  uploads.array("files"),
+  uploads.array('files'),
   body('title').notEmpty().isString(),
   body('content').notEmpty().isString(),
-  addPost
+  addPost,
 );
 
 router.patch(
   '/post',
+  uploads.array('files'),
   query('id').notEmpty().isInt(),
   body('title').notEmpty().isString(),
   body('content').notEmpty().isString(),
-  patchPost
+  patchPost,
 );
 
 router.delete(
   '/post',
   query('id').notEmpty().isInt(),
-  deletePost
+  deletePost,
 );
 
 const postSelectFields = {
   id: true,
   title: true,
   content: true,
+  files: {
+    select: {
+      id: true,
+      filename: true,
+      originalname: true,
+    },
+  },
   updatedAt: true,
   author: {
     select: {
       name: true,
       id: true,
-    }
+    },
   },
 };
 const postOrderBy = {
-  updatedAt: 'desc'
-}
+  updatedAt: 'desc',
+};
 router.get(
   '/posts',
   query('page').notEmpty().isInt(),
   query('limit').notEmpty().isInt(),
   paginationMiddleware(
-    "post",
+    'post',
     postSelectFields,
     postOrderBy,
   ),
-  getPosts
+  getPosts,
 );
 
 export default router;

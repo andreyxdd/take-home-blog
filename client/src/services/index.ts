@@ -55,8 +55,9 @@ axiosAuthInstance.interceptors.request.use(
     const accessToken = Cookies.get('at');
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+      return config;
     }
-    return config;
+    throw Error('Unauthorized request');
   },
   (error) => { Promise.reject(error); },
 );
