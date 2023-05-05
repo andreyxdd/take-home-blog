@@ -10,7 +10,7 @@ import { handleError } from './index';
 export const getUser = async (): Promise<UserProps | null> => {
   try {
     const { data }: { data: UserProps } = await axiosAuthInstance.get(
-      'http://localhost:4000/api/auth/user',
+      `${process.env.REACT_APP_API_URL}/api/auth/user`,
     );
     return data;
   } catch (error: any) {
@@ -30,7 +30,7 @@ export const login = async (
 ): Promise<UserProps | null> => {
   try {
     const { data: user }: { data: UserProps } = await axios.post(
-      'http://localhost:4000/api/auth/login',
+      `${process.env.REACT_APP_API_URL}/api/auth/login`,
       {
         email: email.toLowerCase(),
         password,
@@ -59,7 +59,7 @@ export const register = async (
 ): Promise<UserProps | null> => {
   try {
     const { data: user }: { data: UserProps } = await axios.post(
-      'http://localhost:4000/api/auth/register',
+      `${process.env.REACT_APP_API_URL}/api/auth/register`,
       {
         email: email.toLowerCase(),
         password,
@@ -85,7 +85,7 @@ export const register = async (
 export const logout = async () => {
   try {
     await axiosAuthInstance.post(
-      'http://localhost:4000/api/auth/logout',
+      `${process.env.REACT_APP_API_URL}/api/auth/logout`,
       {},
       { withCredentials: true },
     );

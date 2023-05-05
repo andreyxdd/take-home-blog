@@ -50,12 +50,24 @@ function Post({
         <CardActions>
           <Grid container justifyContent="space-between">
             <Grid item>
-              <Button size="small" color="primary">
+              <Button
+                size="small"
+                sx={{ ml: 1 }}
+                color="primary"
+                variant="contained"
+                disabled
+              >
                 Edit
               </Button>
             </Grid>
             <Grid item>
-              <Button size="small" color="secondary" onClick={handlePostDeletion}>
+              <Button
+                size="small"
+                sx={{ mr: 1 }}
+                color="secondary"
+                onClick={handlePostDeletion}
+                variant="contained"
+              >
                 Delete
               </Button>
             </Grid>

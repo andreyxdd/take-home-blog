@@ -49,13 +49,21 @@ function NewPost() {
               <Button
                 size="small"
                 color="primary"
+                sx={{ ml: 1 }}
                 type="submit"
+                variant="contained"
               >
                 Create
               </Button>
             </Grid>
             <Grid item>
-              <Button size="small" color="secondary">
+              <Button
+                size="small"
+                sx={{ mr: 1 }}
+                color="secondary"
+                variant="contained"
+                disabled
+              >
                 Clear
               </Button>
             </Grid>

@@ -20,7 +20,7 @@ export default function Main({ posts, limit, setLimit }: MainProps) {
         Add new post
       </Typography>
       <NewPost />
-      <Divider sx={{ mt: 2, mb: 2 }} />
+      <Divider sx={{ mt: 3, mb: 3 }} />
       <Grid
         container
         direction="row"

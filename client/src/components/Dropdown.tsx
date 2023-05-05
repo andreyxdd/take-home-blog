@@ -16,7 +16,7 @@ function Dropdown({ limit, setLimit }: DropdownProps) {
   };
 
   return (
-    <Box sx={{ width: 'max-content' }}>
+    <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel id="simple-select-label">Posts per page</InputLabel>
         <Select

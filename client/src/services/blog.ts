@@ -9,7 +9,7 @@ type GetPostsProps = {
 export const getPosts = async (page: number, limit = 20) => {
   try {
     const { data }: { data: GetPostsProps } = await axiosAuthInstance.get(
-      'http://localhost:4000/api/blog/posts',
+      `${process.env.REACT_APP_API_URL}/api/blog/posts`,
       { params: { page, limit } },
     );
     return data;
@@ -22,7 +22,7 @@ export const getPosts = async (page: number, limit = 20) => {
 export const addPost = async ({ title, content }: Pick<PostProps, 'title'|'content'>) => {
   try {
     await axiosAuthInstance.post(
-      'http://localhost:4000/api/blog/posts',
+      `${process.env.REACT_APP_API_URL}/api/blog/posts`,
       { title, content },
       { withCredentials: true },
     );
@@ -36,7 +36,7 @@ export const addPost = async ({ title, content }: Pick<PostProps, 'title'|'conte
 export const deletePost = async (postId: number): Promise<boolean> => {
   try {
     await axiosAuthInstance.delete(
-      'http://localhost:4000/api/blog/post',
+      `${process.env.REACT_APP_API_URL}/api/blog/post`,
       { params: { id: postId } },
     );
     return true;

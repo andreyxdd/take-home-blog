@@ -78,11 +78,10 @@ axiosAuthInstance.interceptors.response.use(
         );
         const accessToken = Cookies.get('at');
 
-        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axiosAuthInstance(originalRequest);
       }
     }
-    return new Error('Unauthorized request');
+    return Promise.reject(error);
   },
 );

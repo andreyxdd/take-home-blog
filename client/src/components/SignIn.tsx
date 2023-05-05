@@ -55,7 +55,7 @@ export default function SignIn() {
           name="email"
           autoComplete="email"
           autoFocus
-          defaultValue="alice@prisma.io"
+          defaultValue={process.env.REACT_APP_TEST_EMAIL}
         />
         <TextField
           margin="normal"
@@ -66,7 +66,7 @@ export default function SignIn() {
           type="password"
           id="password"
           autoComplete="current-password"
-          defaultValue="qwerty123"
+          defaultValue={process.env.REACT_APP_TEST_PASSWORD}
         />
         <Button
           type="submit"
