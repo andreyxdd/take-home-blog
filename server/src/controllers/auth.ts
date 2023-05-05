@@ -4,11 +4,15 @@ import { Request, Response } from 'express';
 import { hash, compare } from 'bcryptjs';
 import { verify } from 'jsonwebtoken';
 import {
-  createAccessToken, createRefreshToken, attachRefreshToken, revokeRefreshToken, attachAccessToken
+  createAccessToken, createRefreshToken,
+  attachRefreshToken, revokeRefreshToken,
+  attachAccessToken
 } from '../utils/auth';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 import { timeToUpdateRefreshToken } from '../utils/config';
+import { validationResult } from 'express-validator';
+import { RequestProps } from '../types';
 
 export const getUser = async (_req: Request, res: Response) => {
   try {
@@ -32,10 +36,22 @@ export const getUser = async (_req: Request, res: Response) => {
   }
 };
 
-
-export const register = async (req: Request, res: Response) => {
+type RegisterBodyProps = {
+  email: string;
+  password: string;
+  name: string;
+}
+export const register = async (
+  req: RequestProps<RegisterBodyProps, {}>,
+  res: Response
+) => {
   try {
     const { email, password, name } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ details: errors.array() });
+    }
 
     const existingUser = await prisma.user.findUnique({where: { email }});
     if (existingUser) {
@@ -67,10 +83,18 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-
-export const login = async (req: Request, res: Response) => {
+type LoginBodyProps = {
+  email: string;
+  password: string;
+}
+export const login = async (req: RequestProps<LoginBodyProps, {}>, res: Response) => {
   try {
     const { email, password } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ details: errors.array() });
+    }
 
     const existingUser = await prisma.user.findUnique({where: { email }});
 

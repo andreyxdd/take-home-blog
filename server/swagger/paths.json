@@ -17,17 +17,18 @@
   "/api/auth/register": {
     "post": {
       "tags": ["Auth"],
+      "security": { "bearerAuth": [] },
       "description": "Register a new user",
-      "parameters": [
-        {
-          "name": "User",
-          "in": "body",
-          "description": "New user credentials",
-          "schema": {
-            "$ref": "#/definitions/UserRegistration"
+      "requestBody": {
+        "description": "New user credentials",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
           }
         }
-      ],
+      },
       "responses": {
         "200": {
           "description": "OK",
@@ -41,17 +42,18 @@
   "/api/auth/login": {
     "post": {
       "tags": ["Auth"],
+      "security": { "bearerAuth": [] },
       "description": "Login an existing user",
-      "parameters": [
-        {
-          "name": "User",
-          "in": "body",
-          "description": "Existing user credentials",
-          "schema": {
-            "$ref": "#/definitions/UserLogin"
+      "requestBody": {
+        "description": "Existing user credentials",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
           }
         }
-      ],
+      },
       "produces": ["application/json"],
       "responses": {
         "200": {
@@ -78,6 +80,7 @@
   "/api/auth/refresh-tokens": {
     "patch": {
       "tags": ["Auth"],
+      "security": { "bearerAuth": [] },
       "description": "Issue new access and refresh tokens",
       "produces": ["application/json"]
     }
@@ -112,16 +115,16 @@
     "post": {
       "tags": ["Blog"],
       "description": "Add a new post",
-      "parameters": [
-        {
-          "name": "Post",
-          "in": "body",
-          "description": "Title and content of a new post",
-          "schema": {
-            "$ref": "#/definitions/PostAddUpdate"
+      "requestBody": {
+        "description": "Title and content of a new post",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/PostAddUpdate"
+            }
           }
         }
-      ],
+      },
       "produces": ["application/json"],
       "responses": {
         "200": {
@@ -143,16 +146,16 @@
     "patch": {
       "summary": "Update the post with the given id",
       "tags": ["Blog"],
-      "parameters": [
-        {
-          "name": "Patch",
-          "in": "body",
+      "requestBody": {
           "description": "A new or updated post",
-          "schema": {
-            "$ref": "#/definitions/PostAddUpdate"
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/PostAddUpdate"
+            }
           }
         }
-      ],
+      },
       "responses": {
         "200": {
           "description": "Success"
