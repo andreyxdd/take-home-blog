@@ -5,12 +5,15 @@ import Divider from '@mui/material/Divider';
 import { PostProps } from '../types';
 import Post from './Post';
 import NewPost from './NewPost';
+import Dropdown from './Dropdown';
 
 interface MainProps {
   posts: Array<PostProps>;
+  limit: number;
+  setLimit: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Main({ posts }: MainProps) {
+export default function Main({ posts, limit, setLimit }: MainProps) {
   return (
     <Grid item xs={8}>
       <Typography variant="h6" gutterBottom>
@@ -18,9 +21,21 @@ export default function Main({ posts }: MainProps) {
       </Typography>
       <NewPost />
       <Divider sx={{ mt: 2, mb: 2 }} />
-      <Typography variant="h6" gutterBottom>
-        Posts
-      </Typography>
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item>
+          <Typography variant="h6" gutterBottom>
+            Posts
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Dropdown limit={limit} setLimit={setLimit} />
+        </Grid>
+      </Grid>
       <Grid container spacing={3} direction="column">
         {posts.map(({
           id, title, content, updatedAt, author,

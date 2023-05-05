@@ -11,18 +11,15 @@ import usePosts from '../hooks/queries/usePosts';
 
 export default function Blog() {
   const [page, setPage] = React.useState(1);
-  const { data, isLoading } = usePosts({ page, limit: 3 });
-
+  const [limit, setLimit] = React.useState(3);
+  const { data, isLoading } = usePosts({ page, limit });
   const handleChange = (_e: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
   if (!data) return null;
 
-  const {
-    data: posts,
-    totalPages,
-  } = data;
+  const { data: posts, totalPages } = data;
 
   return (
     <Container maxWidth="lg">
@@ -31,7 +28,7 @@ export default function Blog() {
         {isLoading
           ? <CircularProgress /> : (
             <Grid container spacing={3} sx={{ mt: 3 }} justifyContent="center">
-              <Main posts={posts} />
+              <Main posts={posts} limit={limit} setLimit={setLimit} />
             </Grid>
           )}
       </main>
