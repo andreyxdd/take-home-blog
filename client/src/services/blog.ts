@@ -19,13 +19,14 @@ export const getPosts = async (page: number, limit = 20) => {
   }
 };
 
-export const addPost = async ({ title, content }: Pick<PostProps, 'title'|'content'>) => {
+export const addPost = async (formData: any) => {
   try {
-    await axiosAuthInstance.post(
-      `${process.env.REACT_APP_API_URL}/api/blog/posts`,
-      { title, content },
-      { withCredentials: true },
-    );
+    await axiosAuthInstance({
+      method: 'post',
+      url: `${process.env.REACT_APP_API_URL}/api/blog/posts`,
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return true;
   } catch (error: any) {
     handleError(error);

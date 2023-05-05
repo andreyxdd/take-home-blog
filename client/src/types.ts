@@ -3,6 +3,7 @@ export type PostProps = {
   updatedAt: string;
   title: string;
   content: string;
+  files: FileList | null;
   author: {
     id: string;
     name: string;

@@ -24,4 +24,17 @@ model Post {
   content   String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
+  files     File[]
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  filename  String   @unique
+  path      String
+  mimetype  String
+  size      BigInt
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
 }
