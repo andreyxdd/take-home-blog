@@ -42,7 +42,7 @@ type RegisterBodyProps = {
   name: string;
 }
 export const register = async (
-  req: RequestProps<RegisterBodyProps, object>,
+  req: RequestProps<object, RegisterBodyProps, object>,
   res: Response,
 ) => {
   try {
@@ -88,7 +88,7 @@ type LoginBodyProps = {
   password: string;
 }
 export const login = async (
-  req: RequestProps<LoginBodyProps, object>,
+  req: RequestProps<object, LoginBodyProps, object>,
   res: Response,
 ) => {
   try {

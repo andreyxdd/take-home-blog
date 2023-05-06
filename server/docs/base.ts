@@ -3,7 +3,7 @@ export default {
   info: {
     version: '1.0.0',
     title: 'Take Home Blog Node.js Project',
-    description: 'API Documentation',
+    description: 'API Documentation for the take home test project (Blog implemntation via Node.js/Express.js/PostgreSQL).\n\n Be aware: the rate limiter is enabled!',
     license: {
       name: 'MIT',
       url: 'https://opensource.org/licenses/MIT',

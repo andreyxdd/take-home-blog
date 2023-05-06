@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { query, body } from 'express-validator';
+import { query, body, param } from 'express-validator';
+import { Prisma } from '@prisma/client';
 import paginationMiddleware from '../middleware/pagination';
-import authMiddleware from '../middleware/auth';
+// import authMiddleware from '../middleware/auth';
 import uploads from '../middleware/uploads';
 import {
   getPosts, addPost, patchPost, deletePost,
@@ -9,50 +10,50 @@ import {
 
 const router = Router();
 
-router.use(authMiddleware);
+// router.use(authMiddleware);
 router.post(
   '/posts',
   uploads.array('files'),
   body('title').notEmpty().isString(),
-  body('content').notEmpty().isString(),
+  body('body').notEmpty().isString(),
   addPost,
 );
 
 router.patch(
-  '/post',
+  '/post/:id',
   uploads.array('files'),
-  query('id').notEmpty().isInt(),
+  param('id').notEmpty().isString(),
   body('title').notEmpty().isString(),
-  body('content').notEmpty().isString(),
+  body('body').notEmpty().isString(),
   patchPost,
 );
 
 router.delete(
-  '/post',
-  query('id').notEmpty().isInt(),
+  '/post/:id',
+  param('id').notEmpty().isString(),
   deletePost,
 );
 
-const postSelectFields = {
+const postSelectFields: Prisma.PostSelect = {
   id: true,
   title: true,
-  content: true,
+  body: true,
   files: {
     select: {
       id: true,
-      filename: true,
       originalname: true,
     },
   },
+  createdAt: true,
   updatedAt: true,
   author: {
     select: {
-      name: true,
       id: true,
+      name: true,
     },
   },
 };
-const postOrderBy = {
+const postOrderBy: {updatedAt: 'desc' | 'asc'} = {
   updatedAt: 'desc',
 };
 router.get(

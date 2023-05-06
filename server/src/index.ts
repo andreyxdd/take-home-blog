@@ -11,7 +11,7 @@ import { rateLimit } from 'express-rate-limit';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 
-import swaggerConfig from '../swagger';
+import swaggerConfig from '../docs';
 import { version } from '../package.json';
 
 import { corsOptions } from './utils/config';
@@ -28,19 +28,14 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 // -- GLOBAL MIDDLEWARE
-// Enable body parsing
-app.use(bodyParser.json({ limit: '30mb' }));
-app.use(bodyParser.urlencoded({ limit: '30mb', extended: false }));
-
 // Enable CORS (Access-Control-Allow-Origin: only from the client!)
 app.use(cors(corsOptions));
 
-// body/cookies parser
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({
-  extended: true,
-  limit: '10kb',
-}));
+// Enable body/cookies parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(coockieParser());
 
 // Security Headers

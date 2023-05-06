@@ -1,45 +1,4 @@
 export default {
-  UserRegistration: {
-    required: ['email', 'password', 'name'],
-    properties: {
-      email: {
-        type: 'string',
-      },
-      password: {
-        type: 'string',
-      },
-      name: {
-        type: 'string',
-      },
-    },
-  },
-  UserLogin: {
-    required: ['email', 'password'],
-    properties: {
-      email: {
-        type: 'string',
-        default: 'alice@test.com',
-      },
-      password: {
-        type: 'string',
-        default: 'qwerty123',
-      },
-    },
-  },
-  UserResponse: {
-    required: ['email', 'name', 'id'],
-    properties: {
-      email: {
-        type: 'string',
-      },
-      name: {
-        type: 'string',
-      },
-      id: {
-        type: 'string',
-      },
-    },
-  },
   PostResponse: {
     properties: {
       id: {
@@ -48,7 +7,10 @@ export default {
       title: {
         type: 'string',
       },
-      content: {
+      body: {
+        type: 'string',
+      },
+      createdAt: {
         type: 'string',
       },
       updatedAt: {
@@ -73,9 +35,6 @@ export default {
             id: {
               type: 'string',
             },
-            filename: {
-              type: 'string',
-            },
             originalname: {
               type: 'string',
             },
@@ -96,17 +55,21 @@ export default {
     },
   },
   PostAddUpdate: {
-    required: ['title', 'content', 'file'],
+    type: 'object',
+    required: ['title', 'body'],
     properties: {
       title: {
         type: 'string',
       },
-      content: {
+      body: {
         type: 'string',
       },
-      file: {
+      files: {
         type: 'array',
-        items: {},
+        items: {
+          type: 'string',
+          format: 'binary',
+        },
       },
     },
   },

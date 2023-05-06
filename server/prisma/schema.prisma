@@ -17,25 +17,24 @@ model User {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String
-  content   String
+  body      String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
   files     File[]
 }
 
 model File {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(uuid())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  filename     String   @unique
   originalname String
   path         String
   mimetype     String
   size         BigInt
   post         Post     @relation(fields: [postId], references: [id])
-  postId       Int
+  postId       String
 }

@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { PrismaModelName, RequestProps, PaginationQuery } from '../types';
+import {
+  PrismaModelName, PrismaSelectUnion, PrismaOrderBy, RequestProps, PaginationQuery,
+} from '../types';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 
-type PaginationResults = {
-  data?: any;
+type PaginationResults<T> = {
+  data?: T;
   totalPages: number;
 }
 
 function pagination(
   modelName: PrismaModelName,
-  select: any = {},
-  orderBy: any = {},
+  select: PrismaSelectUnion, // select query for prisma
+  orderBy: PrismaOrderBy<PrismaSelectUnion>, // sorting settings for prisma
 ) {
   return async (
-    req: RequestProps<object, PaginationQuery>,
+    req: RequestProps<object, object, PaginationQuery>,
     res: Response,
     next: NextFunction,
   ) => {
@@ -30,7 +32,7 @@ function pagination(
     limit = Number(limit);
 
     const startIndex = (page - 1) * limit;
-    const paginated: PaginationResults = {
+    const paginated: PaginationResults<PrismaModelName> = {
       totalPages: 0,
     };
 

@@ -1,77 +1,42 @@
 import 'reflect-metadata';
 
 import { Response } from 'express';
-import { File } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 import { RequestProps, PaginationQuery } from '../types';
+import { getFiles, updateUserPostWithFiles, deleteFilesFromSystem } from './utils';
 
 type PostBody = {
   title: string;
-  content: string;
+  body: string;
 }
 
 export const getPosts = (
-  _req: RequestProps<object, PaginationQuery>,
+  _req: RequestProps<object, object, PaginationQuery>,
   res: Response,
 ) => {
   res.status(200).send(res.locals.paginated);
 };
 
-export const addPost = async (req: RequestProps<PostBody, object>, res: Response) => {
+export const addPost = async (
+  req: RequestProps<object, PostBody, object>,
+  res: Response,
+) => {
   try {
-    const { id: userId } = res.locals.payload;
-    const { title, content } = req.body;
+    // const { id: userId } = res.locals.payload;
+    const userId = '8b5eabe6-b5d6-4ebc-9b25-c7a0090af7fa';
+    const { title, body } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send({ details: errors.array() });
     }
 
-    const requestFiles = req.files as Express.Multer.File[] | undefined;
-    let files: Array<Pick<File, 'filename'|'originalname'|'path'|'mimetype'|'size'>> = [];
-    if (requestFiles) {
-      files = requestFiles.map((file) => {
-        const {
-          filename, originalname, path, mimetype, size,
-        } = file;
-        return {
-          filename, originalname, path, mimetype, size: BigInt(size),
-        };
-      });
-    }
-
-    // Prisma doesn't allow nested create statements (user->posts->files)
-    // as a workaround, we creta posts and then find the most recent one
-    // to add files to this post
-    const insertData = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        posts: { create: { title, content } },
-      },
-      include: { posts: true },
+    const files = getFiles(req.files as Express.Multer.File[] | undefined);
+    await updateUserPostWithFiles({
+      userId, title, body, files,
     });
-
-    if (files.length) {
-      // looking for the most recently created post
-      const lastPost = insertData.posts.sort(
-        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      )[0];
-      // adding files to this post
-      await prisma.post.update({
-        where: { id: lastPost.id },
-        data: {
-          files: {
-            createMany: {
-              data: files,
-            },
-          },
-        },
-      });
-    }
-    // TODO: Raw SQL should be used instead for above operations
-    // otherwise it might lead to the data lost
 
     return res.status(200).send();
   } catch (e) {
@@ -80,22 +45,41 @@ export const addPost = async (req: RequestProps<PostBody, object>, res: Response
   }
 };
 
-export const patchPost = async (req: RequestProps<PostBody, {id?: number}>, res: Response) => {
+/**
+ * Controller to patch post data.
+ * Since post may have some attached media files,
+ * to update the psot all the related files are deleted first.
+ * If the patch body have newly attached files, these are added to the post.
+ */
+export const patchPost = async (
+  req: RequestProps<{ id: string }, PostBody, object>,
+  res: Response,
+) => {
   try {
-    let { id: postId } = req.query;
-    postId = Number(postId);
-    const { title, content } = req.body;
+    const { id: postId } = req.params;
+    const { title, body } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send({ details: errors.array() });
     }
 
+    const filesToDelete = await deleteFilesFromSystem(postId);
+    const files = getFiles(req.files as Express.Multer.File[] | undefined);
     await prisma.post.update({
       where: { id: postId },
       data: {
         title,
-        content,
+        body,
+        files: {
+          // update = delete old + create new
+          deleteMany: {
+            id: { in: filesToDelete.map((f) => f.id) },
+          },
+          createMany: {
+            data: files,
+          },
+        },
       },
     });
 
@@ -107,12 +91,11 @@ export const patchPost = async (req: RequestProps<PostBody, {id?: number}>, res:
 };
 
 export const deletePost = async (
-  req: RequestProps<object, { id: number }>,
+  req: RequestProps<{ id: string }, object, object >,
   res: Response,
 ) => {
   try {
-    let { id: postId } = req.query;
-    postId = Number(postId);
+    const { id: postId } = req.params;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
