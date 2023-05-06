@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { query } from 'express-validator';
-import { downloadFile, deleteFile } from '../controllers/file';
+import { downloadFile, deleteFile } from '../controllers/files';
 import authMiddleware from '../middleware/auth';
 
 const router = Router();

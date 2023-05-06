@@ -19,12 +19,11 @@ import logger from './utils/logger';
 
 import authRoute from './routes/auth';
 import blogRoute from './routes/blog';
-import fileRoute from './routes/file';
+import fileRoute from './routes/files';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
-const HOST = process.env.HOST || 'http://localhost';
 const PORT = process.env.PORT || 4000;
 const app = express();
 
@@ -75,11 +74,11 @@ app.get('/', (_, res) => {
 });
 app.use('/api/auth', authRoute);
 app.use('/api/blog', blogRoute);
-app.use('/api/file', fileRoute);
+app.use('/api/files', fileRoute);
 // --
 
 app.listen(PORT, () => {
-  logger.info(`Server is running at ${HOST}:${PORT}`);
+  logger.info(`Server is running at port ${PORT}`);
 });
 
 export default app;

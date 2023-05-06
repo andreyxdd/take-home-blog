@@ -20,7 +20,6 @@ export const cookiesOptions: CookieOptions = {
   // httpOnly: true,
   secure: isProduction,
   sameSite: (isProduction ? 'strict' : 'lax'),
-  domain: isProduction ? process.env.BASE_DOMAIN : '*',
   path: '/',
 };
 

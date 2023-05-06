@@ -1,11 +1,11 @@
-import base from './base.json';
-import paths from './paths.json';
-import definitions from './definitions.json';
+import base from './base';
+import paths from './paths';
+import definitions from './definitions';
 
 const config = {
   ...base,
   paths: { ...paths },
-  definitions: { ...definitions }
-}
+  definitions: { ...definitions },
+};
 
 export default config;
