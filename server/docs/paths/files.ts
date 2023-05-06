@@ -1,12 +1,11 @@
 export default {
-
-  '/api/file': {
+  '/api/files/{id}': {
     parameters: [
       {
-        name: 'filename',
-        in: 'query',
+        name: 'id',
+        in: 'path',
         required: true,
-        description: 'Filename as it appears in the \'uploads\' directory. This filename is passed with response body of the \'api/blog/posts\' GET endpoint.',
+        description: 'File id as it appears in the \'uploads\' directory. This filename is passed with response body of the \'api/blog/posts\' GET endpoint.',
         type: 'integer',
       },
     ],

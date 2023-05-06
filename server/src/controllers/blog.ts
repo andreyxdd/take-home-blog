@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator';
 import prisma from '../utils/db';
 import logger from '../utils/logger';
 import { RequestProps, PaginationQuery } from '../types';
-import { getFiles, updateUserPostWithFiles, deleteFilesFromSystem } from './utils';
+import { getFiles, updateUserPostWithFiles, deleteManyFilesFromSystem } from './utils';
 
 type PostBody = {
   title: string;
@@ -64,7 +64,7 @@ export const patchPost = async (
       return res.status(400).send({ details: errors.array() });
     }
 
-    const filesToDelete = await deleteFilesFromSystem(postId);
+    const filesToDelete = await deleteManyFilesFromSystem(postId);
     const files = getFiles(req.files as Express.Multer.File[] | undefined);
     await prisma.post.update({
       where: { id: postId },

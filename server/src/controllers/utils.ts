@@ -74,18 +74,23 @@ export const getFiles = (requestFiles: Express.Multer.File[] | undefined) => {
   return files;
 };
 
-export const deleteFilesFromSystem = async (postId: string) => {
+export const deleteSingleFileFromSystem = async (id: string) => {
+  fs.rm(`${path.resolve(__dirname, '../..')}/uploads/${id}`, { recursive: true }, (err) => {
+    if (err) {
+      throw new Error(`Deletion of the File named ${id} failed`);
+    }
+  });
+};
+
+export const deleteManyFilesFromSystem = async (postId: string) => {
   const filesToDelete = await prisma.file.findMany({
     where: { postId },
   });
 
   if (filesToDelete.length) {
-    filesToDelete.forEach(({ id }) => {
-      fs.rm(`${path.resolve(__dirname, '../..')}/uploads/${id}`, { recursive: true }, (err) => {
-        if (err) {
-          throw new Error(`Deletion of the File named ${id} failed`);
-        }
-      });
+    filesToDelete.forEach(async (file) => {
+      await deleteSingleFileFromSystem(file.id);
+      return file;
     });
   }
 

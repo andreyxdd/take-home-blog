@@ -1,9 +1,9 @@
 import { Response } from 'express';
 import { validationResult } from 'express-validator';
-import fs from 'fs';
 import prisma from '../utils/db';
 import { RequestProps } from '../types';
 import logger from '../utils/logger';
+import { deleteSingleFileFromSystem } from './utils';
 
 export const downloadFile = async (
   req: RequestProps<{ id: string }, object, object>,
@@ -23,7 +23,7 @@ export const downloadFile = async (
       return res.status(404).send({ details: 'File with given id doesn\'t exist' });
     }
 
-    res.setHeader('Content-Disposition', `inline; filename*="${fileInfo.originalname}"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${fileInfo.originalname}"`);
     return res.status(200).type(fileInfo.mimetype).sendFile(fileInfo.path);
   } catch (e) {
     logger.info(e);
@@ -50,7 +50,7 @@ export const deleteFile = async (
       return res.status(404).send({ details: 'File with given id doesn\'t exist' });
     }
 
-    fs.unlinkSync(fileInfo.path);
+    await deleteSingleFileFromSystem(fileInfo.id);
 
     return res.status(200).send();
   } catch (e) {

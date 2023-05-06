@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { query, body, param } from 'express-validator';
 import { Prisma } from '@prisma/client';
 import paginationMiddleware from '../middleware/pagination';
-// import authMiddleware from '../middleware/auth';
+import authMiddleware from '../middleware/auth';
 import uploads from '../middleware/uploads';
 import {
   getPosts, addPost, patchPost, deletePost,
@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 router.post(
   '/posts',
   uploads.array('files'),
