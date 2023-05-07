@@ -24,8 +24,7 @@ export const addPost = async (
   res: Response,
 ) => {
   try {
-    // const { id: userId } = res.locals.payload;
-    const userId = '8b5eabe6-b5d6-4ebc-9b25-c7a0090af7fa';
+    const { id: userId } = res.locals.payload;
     const { title, body } = req.body;
 
     const errors = validationResult(req);
