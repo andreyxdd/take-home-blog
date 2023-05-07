@@ -1,4 +1,4 @@
-# Take Home Blog Node.js Project (Client Side)
+# Client Side
 
 ## Available Scripts
 
