@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { File } from '@prisma/client';
 import prisma from '../utils/db';
+import logger from '../utils/logger';
 
 type FileProps = Pick<File, 'id' | 'originalname' | 'path' | 'mimetype' | 'size'>;
 
@@ -77,7 +78,9 @@ export const getFiles = (requestFiles: Express.Multer.File[] | undefined) => {
 export const deleteSingleFileFromSystem = async (id: string) => {
   fs.rm(`${path.resolve(__dirname, '../..')}/uploads/${id}`, { recursive: true }, (err) => {
     if (err) {
-      throw new Error(`Deletion of the File named ${id} failed`);
+      logger.error(`Deletion of the File named ${id} failed:`);
+      logger.error(err.message);
+      throw new Error(err.message);
     }
   });
 };

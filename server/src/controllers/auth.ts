@@ -55,7 +55,7 @@ export const register = async (
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ details: 'User account already exists' });
+      return res.status(400).send({ details: 'User account already exists' });
     }
 
     const user = await prisma.user.create({
@@ -67,7 +67,7 @@ export const register = async (
     });
 
     if (!user) {
-      return res.status(503).json({ details: 'Unable to register a new user' });
+      return res.status(503).send({ details: 'Unable to register a new user' });
     }
 
     attachRefreshToken(res, createRefreshToken(user));
@@ -102,12 +102,12 @@ export const login = async (
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (!existingUser) {
-      return res.status(401).json({ details: 'Invalid credentials provided' });
+      return res.status(401).send({ details: 'Invalid credentials provided' });
     }
 
     const passwordIsValid = await compare(password, existingUser.password!);
     if (!passwordIsValid) {
-      return res.status(401).json({ details: 'Invalid credentials provided' });
+      return res.status(401).send({ details: 'Invalid credentials provided' });
     }
 
     attachRefreshToken(res, createRefreshToken(existingUser));
@@ -129,7 +129,7 @@ export const logout = async (_req: Request, res: Response) => {
     const existingUser = await prisma.user.findUnique({ where: { id } });
 
     if (!existingUser) {
-      return res.status(404).json({ details: 'Invalid payload' });
+      return res.status(404).send({ details: 'Invalid payload' });
     }
 
     const revokedStatus = await revokeRefreshToken(existingUser.id);
