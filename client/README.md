@@ -1,13 +1,10 @@
 # Take Home Blog Node.js Project (Client Side)
 
-A take home project for a Node.js position.
-
 ## Available Scripts
 
 Install dependencies:
 
 ### `yarn install`
-
 
 Then, in the project directory, run:
 
