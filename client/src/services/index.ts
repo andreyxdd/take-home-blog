@@ -57,7 +57,7 @@ axiosAuthInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${accessToken}`;
       return config;
     }
-    throw Error('Unauthorized request');
+    throw new AxiosError('Unauthorized request', '403', config);
   },
   (error) => { Promise.reject(error); },
 );
@@ -70,7 +70,7 @@ axiosAuthInstance.interceptors.response.use(
     if (refreshToken) {
       const originalRequest = error.config;
 
-      if (error.response.status === 403 && !originalRequest._retry) {
+      if (error.code === '403' && !originalRequest._retry) {
         originalRequest._retry = true;
         await axios.patch(
           'http://localhost:4000/api/auth/refresh-tokens',

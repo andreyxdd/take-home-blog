@@ -2,7 +2,7 @@ export type PostProps = {
   id: number;
   updatedAt: string;
   title: string;
-  content: string;
+  body: string;
   files: FileList | null;
   author: {
     id: string;

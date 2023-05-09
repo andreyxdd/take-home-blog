@@ -11,7 +11,7 @@ import useUserContext from './hooks/useUserContext';
 const queryClient = new QueryClient();
 const theme = createTheme();
 
-function Content() {
+function MainView() {
   const { user, isLoading } = useUserContext();
 
   if (isLoading) {
@@ -38,7 +38,7 @@ function App() {
       <UserContextProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Content />
+          <MainView />
           <Footer
             description="Proudly created by Andrei Volkov"
           />

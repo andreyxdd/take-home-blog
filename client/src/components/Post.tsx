@@ -11,13 +11,13 @@ type PostComponentProps = {
   id: number;
   updatedAt: string;
   title: string;
-  content: string;
+  body: string;
   authorName: string;
   authorId: string;
 }
 
 function Post({
-  id, title, content, updatedAt, authorName, authorId,
+  id, title, body, updatedAt, authorName, authorId,
 }: PostComponentProps) {
   const { mutate } = useDeletePostMutation();
   const { user } = useUserContext();
@@ -43,7 +43,7 @@ function Post({
           {isUsersPost ? 'you' : <b>{authorName}</b>}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {content}
+          {body}
         </Typography>
       </CardContent>
       {isUsersPost ? (

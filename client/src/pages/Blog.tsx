@@ -17,6 +17,10 @@ export default function Blog() {
     setPage(value);
   };
 
+  React.useEffect(() => {
+    setPage(1);
+  }, [limit]);
+
   if (!data) return null;
 
   const { data: posts, totalPages } = data;

@@ -38,13 +38,13 @@ export default function Main({ posts, limit, setLimit }: MainProps) {
       </Grid>
       <Grid container spacing={3} direction="column">
         {posts.map(({
-          id, title, content, updatedAt, author,
+          id, title, body, updatedAt, author,
         }) => (
           <Grid item key={id + author.id} flexGrow={1}>
             <Post
               id={id}
               title={title}
-              content={content}
+              body={body}
               updatedAt={updatedAt}
               authorName={author.name}
               authorId={author.id}

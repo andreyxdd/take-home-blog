@@ -8,7 +8,7 @@ function NewPost() {
   const { mutateAsync } = useAddPostMutation();
   const [files, setFiles] = React.useState<FileList>();
   const [title, setTitle] = React.useState<string>('');
-  const [content, setContent] = React.useState<string>('');
+  const [body, setBody] = React.useState<string>('');
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -21,19 +21,19 @@ function NewPost() {
       }
     }
 
-    if (title && content) {
+    if (title && body) {
       formData.set('title', title);
-      formData.set('content', content);
+      formData.set('body', body);
 
       // posting a new post
       await mutateAsync(formData);
 
       // resseting state and clearing the form
       setTitle('');
-      setContent('');
+      setBody('');
       setFiles(undefined);
       formData.delete('title');
-      formData.delete('content');
+      formData.delete('body');
       formData.delete('files');
     }
   };
@@ -63,10 +63,10 @@ function NewPost() {
                 multiline
                 rows={4}
                 fullWidth
-                name="content"
-                id="content"
-                onChange={(e) => setContent(e.target.value)}
-                value={content}
+                name="body"
+                id="body"
+                onChange={(e) => setBody(e.target.value)}
+                value={body}
                 required
                 variant="standard"
               />
