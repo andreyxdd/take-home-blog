@@ -3,7 +3,7 @@ import { CookieOptions } from 'express';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV !== 'production';
+// const isProduction = process.env.NODE_ENV !== 'production';
 
 export const corsOptions = {
   allowedHeaders: [
@@ -18,8 +18,8 @@ export const corsOptions = {
 
 export const cookiesOptions: CookieOptions = {
   // httpOnly: true,
-  secure: isProduction,
-  sameSite: (isProduction ? 'strict' : 'lax'),
+  // secure: isProduction,
+  sameSite: 'lax',
   path: '/',
 };
 
