@@ -4,7 +4,7 @@ import useUserContext from '../useUserContext';
 
 type PaginationProps = {
   page: number;
-  limit?: number;
+  limit: number;
 }
 
 const usePosts = ({ page, limit }: PaginationProps) => {

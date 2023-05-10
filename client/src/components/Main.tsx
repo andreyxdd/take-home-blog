@@ -40,7 +40,7 @@ export default function Main({ posts, limit, setLimit }: MainProps) {
         {posts.map(({
           id, title, body, updatedAt, author,
         }) => (
-          <Grid item key={id + author.id} flexGrow={1}>
+          <Grid item key={id + author.id} xs={12}>
             <Post
               id={id}
               title={title}

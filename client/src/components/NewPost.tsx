@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {
-  Button, CardActions, Grid, TextField, CardContent, Card, Box,
+  CardActions, Grid, TextField, CardContent, Card, Box,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import useAddPostMutation from '../hooks/mutations/useAddPostMutation';
 
 function NewPost() {
-  const { mutateAsync } = useAddPostMutation();
+  const { mutateAsync, isLoading } = useAddPostMutation();
   const [files, setFiles] = React.useState<FileList>();
   const [title, setTitle] = React.useState<string>('');
   const [body, setBody] = React.useState<string>('');
@@ -88,16 +89,17 @@ function NewPost() {
               />
             </Grid>
             <Grid item>
-              <Button
+              <LoadingButton
                 type="button"
                 size="small"
                 color="primary"
                 sx={{ mr: 1 }}
                 variant="contained"
                 onClick={handleSubmit}
+                loading={isLoading}
               >
-                Create
-              </Button>
+                Add
+              </LoadingButton>
             </Grid>
           </Grid>
         </CardActions>

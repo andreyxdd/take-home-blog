@@ -4,7 +4,7 @@ import { deletePost } from '../../services/blog';
 const useDeletePostMutation = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (postId: number) => deletePost(postId),
+    mutationFn: (postId: string) => deletePost(postId),
     onSuccess: async (isDeleted: boolean) => {
       if (isDeleted) await queryClient.invalidateQueries({ queryKey: ['posts'] });
     },

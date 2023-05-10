@@ -1,8 +1,11 @@
-export type PostProps = {
-  id: number;
-  updatedAt: string;
+export type EditPostProps = {
+  id: string;
   title: string;
   body: string;
+}
+
+export type PostProps = EditPostProps & {
+  updatedAt: string;
   files: FileList | null;
   author: {
     id: string;

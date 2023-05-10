@@ -16,7 +16,7 @@ function Dropdown({ limit, setLimit }: DropdownProps) {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120, pb: 2 }}>
       <FormControl fullWidth>
         <InputLabel id="simple-select-label">Posts per page</InputLabel>
         <Select
@@ -25,6 +25,7 @@ function Dropdown({ limit, setLimit }: DropdownProps) {
           value={String(limit)}
           label="Number of posts per page"
           onChange={handleChange}
+          variant="standard"
         >
           <MenuItem value={3}>3</MenuItem>
           <MenuItem value={5}>5</MenuItem>
